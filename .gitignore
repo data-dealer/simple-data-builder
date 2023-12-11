@@ -1,0 +1,16 @@
+/data/*
+spark-warehouse
+.pytest_cache
+**/__pycache__
+
+.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
+**/._./._./DS_Store
+
+.ipynb_checkpoints
+._.ipynb_checkpoints
+**/.ipynb_checkpoints
+**/._.ipynb_checkpoints
+**/._./._./ipynb_checkpoints

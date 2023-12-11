@@ -1,0 +1,36 @@
+[build-system]
+requires = [
+  "setuptools>=61.0", 
+  "delta_spark==2.1.1", 
+  "pyspark==3.3.1", 
+  "boto3==1.26.45",
+  "python-dateutil"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simple-data-builder"
+version = "0.0.1"
+authors = [
+  { name="datadealer", email="minhnq.mis@example.com" },
+]
+description = "A small package to build delta-lakehouse and data modeling"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/mis-drug-dealer/"
+
+[tool.pytest.ini_options]
+addopts =[
+  "-v",
+  "--cov=src"
+]
+
+[tool.coverage.report]
+skip_empty = true
