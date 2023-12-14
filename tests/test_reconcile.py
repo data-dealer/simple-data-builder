@@ -1,30 +1,26 @@
-from pyspark.sql.types import (
-    StructType,
-    StructField,
-    StringType,
-    MapType,
-    ArrayType,
-    IntegerType
-)
-import pytest
 import json
+
+import pytest
+from pyspark.sql.types import (ArrayType, IntegerType, MapType, StringType,
+                               StructField, StructType)
 
 from src.sdb.reconcile import ReconcilitionSuite, SqlCountPair
 
 
 @pytest.fixture(scope="module")
 def df(spark):
-    schema = StructType([
-        StructField("id", IntegerType(), True),
-        StructField("id2", StringType(), True),
-        StructField("data_date", StringType(), True),
-        StructField("test_array", ArrayType(StringType()), True),
-        StructField("test_map", MapType(StringType(), StringType()), True),
-    ])
+    schema = StructType(
+        [
+            StructField("id", IntegerType(), True),
+            StructField("id2", StringType(), True),
+            StructField("data_date", StringType(), True),
+            StructField("test_array", ArrayType(StringType()), True),
+            StructField("test_map", MapType(StringType(), StringType()), True),
+        ]
+    )
     data = [
         (0, "a", "2023-01-03", ["x", "y"], {"name": "test0", "age": "1"}),
-        (12, "a", "2023-01-04", ["x", "y", "Z"],
-         {"name": "test12", "age": "low"}),
+        (12, "a", "2023-01-04", ["x", "y", "Z"], {"name": "test12", "age": "low"}),
         (1, "b", "2023-01-03", ["x", "y"], {"name": "test1", "age": "low"}),
         (2, "b", "2023-01-03", ["x", "y"], {"name": "test2", "age": "low"}),
         (2, "b", "2023-01-04", ["x", "y"], {"name": "test2", "age": "medium"}),
@@ -45,34 +41,24 @@ def reconcile_suites(df):
 
     reconcile_suites = [
         {
-            "sources": [
-                "bronze.gaccount"
-            ],
-            "targets": [
-                "silver.hub_account"
-            ],
+            "sources": ["bronze.gaccount"],
+            "targets": ["silver.hub_account"],
             "source_sql": "select COUNT(DISTINCT id) as cnt_distinct from source_table",
-            "target_sql": "select count(*) as cnt_distinct from target_table"
+            "target_sql": "select count(*) as cnt_distinct from target_table",
         },
         {
-            "sources": [
-                "bronze.sat_gaccount"
-            ],
-            "targets": [
-                "silver.hub_account"
-            ],
+            "sources": ["bronze.sat_gaccount"],
+            "targets": ["silver.hub_account"],
             "source_sql": "select count(*) as cnt from source_table",
-            "target_sql": "select count(*) as cnt from target_table"
-        }
+            "target_sql": "select count(*) as cnt from target_table",
+        },
     ]
     return reconcile_suites
 
 
 def test_sql_count_pair(spark, reconcile_suites, logger):
-
     # reconcile_suites = table_meta.reconciles
-    logger.info("reconcile_suites: %s" %
-                (json.dumps(reconcile_suites, indent=2)))
+    logger.info("reconcile_suites: %s" % (json.dumps(reconcile_suites, indent=2)))
 
     rer = ReconcilitionSuite(spark, SqlCountPair, suite=reconcile_suites)
     rs_json, summary_json, status = rer.validate(output_format="json")
@@ -83,5 +69,5 @@ def test_sql_count_pair(spark, reconcile_suites, logger):
     logger.info(rs_df.show())
     logger.info(summary_df.show())
 
-    assert type(rs_json) == list
+    assert isinstance(rs_json) == list
     assert status == False

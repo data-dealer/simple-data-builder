@@ -1,6 +1,8 @@
+import logging
+
 import pytest
 from pyspark.sql import SparkSession
-import logging
+
 from src.sdb.meta import TableMeta
 
 
@@ -13,9 +15,7 @@ def logger():
 def spark():
     print("init spark fixture")
     spark = (
-        SparkSession
-        .builder
-        .appName("pytest")
+        SparkSession.builder.appName("pytest")
         # .config("spark.jars", "/opt/workspace/jars/deequ-2.0.3-spark-3.3.jar")
         .getOrCreate()
     )
@@ -47,6 +47,9 @@ model:
       type: string
       tests:
         - check: isComplete
+        - check: isContainedIn
+          params:
+            - ["b1", "a2"]
       description: dv columns
 
     - name: dv_loaddts
@@ -64,16 +67,16 @@ model:
       tests:
         - check: isComplete
         - check: hasMax
-          params: 
+          params:
             - "lambda x: x == 20"
-      
+
 depends:
   - table_name: gaccount
     database_name: maxenv-t2_db_bronze
   - table_name: laccount
     database_name: maxenv-t2_db_bronze
-  
-sla: 
+
+sla:
   - streaming
 
 reconciles:
