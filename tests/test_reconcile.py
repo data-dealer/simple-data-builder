@@ -69,5 +69,5 @@ def test_sql_count_pair(spark, reconcile_suites, logger):
     logger.info(rs_df.show())
     logger.info(summary_df.show())
 
-    assert isinstance(rs_json) == list
+    assert type(rs_json) == list
     assert status == False

@@ -32,8 +32,8 @@ def test_deequ_quality(table_meta, spark, df, logger):
         check_suite=table_meta.deequ_quality_params,
         check_level="Warning",
     ).validate(df)
-    logger.info(rs.show())
-    logger.info(summary.show())
+    rs.show()
+    summary.show()
 
     assert rs.count() == 8
     assert summary.count() == 1
