@@ -1,10 +1,10 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.1.0
+    rev: c4a0b883114b00d8d76b479c820ce7950211c99b  # frozen: v4.5.0
     hooks:
     -   id: trailing-whitespace
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v1.25.0
+    rev: 1bbebc88c6925a4e56fd5446b830b12c38c1c24a  # frozen: v3.15.0
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]

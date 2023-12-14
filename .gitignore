@@ -14,3 +14,6 @@ spark-warehouse
 **/.ipynb_checkpoints
 **/._.ipynb_checkpoints
 **/._./._./ipynb_checkpoints
+
+
+.coverage
