@@ -6,7 +6,7 @@ class TableMeta:
     TableMeta(from_txt)
     ```yaml
     version: 1.0.0
-    
+
     model:
         table_name: sat_ltindang
         database_name: maxenv-t2_db_silver
@@ -59,13 +59,13 @@ class TableMeta:
             - table_name: ltindang
             database_name: maxenv-t2_db_bronze
 
-        sla: 
+        sla:
             - streaming
 
         reconciles:
             - sources:
                 - bronze.ltindang
-                targets: 
+                targets:
                 - silver.sat_ltindang
                 source_sql: select COUNT(DISTINCT matin) as cnt_distinct from iceberg_catalog.`maxenv-t2_db_bronze`.ltindang
                 target_sql: select count(*) as cnt_distinct from iceberg_catalog.`maxenv-t2_db_silver`.sat_ltindang
@@ -95,7 +95,7 @@ class TableMeta:
         if self.model.get('catalog'):
             table_identifier = f"{self.model.get('catalog')}.`{self.model['database_name']}`.{self.model['table_name']}"
         return table_identifier
-    
+
     @property
     def struct_type(self):
         from pyspark.sql.types import StructType
@@ -108,7 +108,7 @@ class TableMeta:
             fields.append(item)
 
         return StructType.fromJson({"fields": fields})
-    
+
     @property
     def ddl_sql(self):
         partition_by = self.model.get('partition_by')
@@ -145,6 +145,23 @@ TBLPROPERTIES (
                         "check": _test["check"],
                         "params": [name, *_test.get("params")] if _test.get("params") else [name]
                     })
+
+        return check_suite
+
+    @property
+    def ge_quality_params(self):
+        check_suite = []
+
+        for item in self.model['columns']:
+            name = item['name']
+            tests = item.get("tests")
+            if tests:
+                for _test in tests:
+                    if "expect" in _test["check"]:
+                        check_suite.append({
+                            "check": _test["check"],
+                            "kwargs": {"columns": name, **_test.get("kwargs")} if _test.get("kwargs") else  {"columns": name}
+                        })
 
         return check_suite
 

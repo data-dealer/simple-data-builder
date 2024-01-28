@@ -3,9 +3,9 @@ build-test-env:
 	docker build -f Dockerfile -t sdb-docker-env .
 
 test:
-	docker run --rm -i  \
+	docker run --rm -it  \
 	-v ${PWD}:/opt/workspace \
-	sdb-docker-env pytest tests/ --capture=no --log-cli-level=ERROR
+	sdb-docker-env pytest tests/test_meta.py --capture=no --log-cli-level=DEBUG
 
 gendoc:
 	cd src/ && pdoc --html sdb/ --http localhost:8002

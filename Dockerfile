@@ -12,7 +12,8 @@ COPY spark-defaults.conf ${SPARK_HOME}/conf/spark-defaults.conf
 COPY requirements.txt ${SHARED_WORKSPACE}/requirements.txt
 COPY requirements_test.txt ${SHARED_WORKSPACE}/requirements_test.txt
 # COPY jars/deequ-2.0.3-spark-3.3.jar ${SHARED_WORKSPACE}/jars/deequ-2.0.3-spark-3.3.jar
-RUN curl -o ${SHARED_WORKSPACE}/jars/deequ-2.0.3-spark-3.3.jar https://repo1.maven.org/maven2/com/amazon/deequ/deequ/2.0.3-spark-3.3/deequ-2.0.3-spark-3.3.jar
+RUN curl -o ${SHARED_WORKSPACE}/jars/deequ-2.0.3-spark-3.3.jar \
+  https://repo1.maven.org/maven2/com/amazon/deequ/deequ/2.0.3-spark-3.3/deequ-2.0.3-spark-3.3.jar
 
 
 WORKDIR ${SHARED_WORKSPACE}

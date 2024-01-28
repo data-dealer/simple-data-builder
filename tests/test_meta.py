@@ -1,9 +1,9 @@
 from pyspark.sql.types import (
-    StructType, 
-    StructField, 
-    StringType, 
-    MapType, 
-    ArrayType, 
+    StructType,
+    StructField,
+    StringType,
+    MapType,
+    ArrayType,
     IntegerType
 )
 import pytest
@@ -37,13 +37,15 @@ def test_table_model(table_meta, logger):
     reconcile_suites = table_meta.reconciles
     ddl_sql = table_meta.ddl_sql
     deequ_quality_params = table_meta.deequ_quality_params
+    ge_quality_params = table_meta.ge_quality_params
     spark_struct_type = table_meta.struct_type
-    
+
     logger.info(ddl_sql)
     logger.info("deequ_quality_params: %s"%(json.dumps(deequ_quality_params, indent=2)))
+    logger.info("ge_quality_params: %s" %(json.dumps(ge_quality_params, indent=2)))
     logger.info("reconcile_suites: %s" %(json.dumps(reconcile_suites, indent=2)))
     logger.info(spark_struct_type)
-    
+
     assert type(ddl_sql) == str
     assert type(deequ_quality_params) == list
     assert type(reconcile_suites) == list

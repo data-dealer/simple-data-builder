@@ -19,10 +19,9 @@ def spark():
         # .config("spark.jars", "/opt/workspace/jars/deequ-2.0.3-spark-3.3.jar")
         .getOrCreate()
     )
-
-    yield spark
-
-    spark.sparkContext.stop()
+    return spark
+    # yield spark
+    # spark.sparkContext.stop()
 
 
 meta_txt = """
@@ -36,6 +35,16 @@ model:
   partition_by: null
   data_format: iceberg
   columns:
+    - name: key
+      type: string
+      tests:
+        - check: expect_column_values_to_be_unique
+          kwargs:
+            result_format: BASIC
+        - check: expect_column_values_to_be_in_set
+          kwargs:
+            value_set: ['x', 'y', 'z'] # [1, 2, 3]
+      description: key
     - name: dv_hashkey_account
       type: string
       tests:
